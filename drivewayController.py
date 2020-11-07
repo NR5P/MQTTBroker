@@ -12,12 +12,12 @@ class DrivewayController():
         GPIO.setup(self.light_pin,GPIO.OUT)
 
     def on_msg(self, client, userdata, msg):
-        print(msg.topic+":"+str(msg.payload))
-        if msg.topic == b'outside/driveway_sensor' and msg.payload == b'true':
+        print(msg.topic+":"+msg.payload.decode("utf-8"))
+        if msg.topic == 'outside/driveway_sensor' and msg.payload.decode("utf-8") == 'true':
             print("alarm firing")
-            self.play_alarm()
+            p = self.play_alarm()
             self.turn_light_on()
-            self.stop()
+            p.stop()
 
     def connect_and_subscribe(self):
         client = MQTTClient.Client()
@@ -33,9 +33,7 @@ class DrivewayController():
     def play_alarm(self):
         p = vlc.MediaPlayer("./alarm.mp3")
         p.play()
-
-    def stop_alarm(self):
-        p.stop()
+        return p
 
     def turn_light_on(self):
         for i in range(5):
