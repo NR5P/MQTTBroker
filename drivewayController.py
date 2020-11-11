@@ -18,6 +18,8 @@ class DrivewayController():
             p = self.play_alarm()
             self.turn_light_on()
             p.stop()
+        elif msg.topic == 'outside/driveway_sensor' and msg.payload.decode("utf-8") == 'disconnected':
+            print("check the driveway sensor batteries")
 
     def connect_and_subscribe(self):
         client = MQTTClient.Client()
